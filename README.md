@@ -1,5 +1,6 @@
 # Bookmarklets
 All my bookmarklets, generally workflow time-savers and debugging utilities.
+
 [Learn how to start using bookmarklets now.](https://mreidsma.github.io/bookmarklets/installing.html)
 
 ## Quickly Copy Text with Left Click
