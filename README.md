@@ -12,3 +12,11 @@ javascript:const copyInput=document.createElement("input");copyInput.id="copy-te
 ```
 
 💻 [Human-readable source code](https://github.com/Christopher-Hayes/bookmarklets/blob/main/src/copyTextOnClick.js)
+
+## WebGL FPS
+
+Shows FPS inside any WebGL canvas. Full credit to MrDoob of THREE.JS, source code at https://mrdoob.github.io/stats.js
+
+```
+javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+```
