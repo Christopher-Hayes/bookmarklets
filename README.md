@@ -20,3 +20,26 @@ Shows FPS inside any WebGL canvas. Full credit to MrDoob of THREE.JS, source cod
 ```
 javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
 ```
+
+## PlayCanvas Loaded Assets + VRAM breakdown
+
+Pretty prints in console what PlayCanvas assets are loaded and what assets are contributing to VRAM.
+
+**Functions**
+
+`loadedAssets([ filter() ])` Show all assets currently loaded. Filter is optional.
+
+`loadedAssetsOnlyVRAM([ minSize ])` Show only assets with VRAM (no materials, shaders, etc). `minSize` is for minimum VRAM bytes and is optional.
+
+```
+javascript:function formatBytes(a,b=2){if(0===a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return parseFloat((a/Math.pow(1024,d)).toFixed(c))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d];}var asset={};var cs = { stat: 'background:#555;color:white;padding:.2em;border-radius:3px;',%20stat2:%20'background:#333;color:white;padding:.2em;border-radius:3px;',%20stat3:%20'background:#888;color:#222;padding:.2em;border-radius:3px;',%20};function%20loadedAssets(e){asset={};for(let%20[k,s]%20of%20Object.entries(pc.Application.getApplication().assets.filter(function(s){return%20s.loaded&&(!e||e(s));}))){console.log("%c"+k+'\t'+s.name+"%20%c"+s.type+"%c%20%c"+(s.file&&s.file.size?formatBytes(s.file.size):"")+"%c%20%c"+(s.resource&&s.resource._gpuSize?formatBytes(s.resource._gpuSize):""),"",cs.stat2,"",cs.stat,"",cs.stat3);asset[k]=asset[s.name]=s;}}function%20loadedAssetsOnlyVRAM(e){loadedAssets(function(s){return%20s.resource&&s.resource._gpuSize&&s.resource._gpuSize>=(e||0);});}function%20loadedAssetsOnlyBigVRAM(){loadedAssetsOnlyVRAM(3e6);};loadedAssetsOnlyVRAM();%20%20About%20%20Dev%20Console%20script%20I%20use%20to%20debug%20asset%20loading%20+%20VRAM%20breakdown%20in%20PlayCanvas%20Topics%20Resources%20Readme%20License%20GPL-3.0%20License%20Releases%20No%20releases%20published%20Create%20a%20new%20release%20Packages%20No%20packages%20published%20Publish%20your%20first%20package
+```
+💻 Source code and more information at: https://github.com/Christopher-Hayes/PlayCanvas-Dev-Console
+
+## PlayCanvas Scene Editor - Download multiple selected assets
+
+As of Dec 2020, the PlayCanvas scene editor doesn't allow you to download more than one file at a time without exporting. This script simply loops the right-click -> Download, over all file assets that are selected. Note that it only works on assets visible to DOM and may break on GLB assets that are missing the Download from the right click menu.
+
+```
+javascript:function downloadSelectedAssets(){const e=document.querySelectorAll(".pcui-table-row-selected");for(let t=0;t<e.length;t++)setTimeout(downloadAsset,500*t,e[t])}function downloadAsset(e){click(e,!0),setTimeout(pressDownload,300)}function click(e,t){if(window.CustomEvent)e.dispatchEvent(new CustomEvent(t?"contextmenu":"click"));else if(document.createEvent){var n=document.createEvent("HTMLEvents");n.initEvent(t?"contextmenu":"click",!0,!1),e.dispatchEvent(n)}}function pressDownload(){var e=document.querySelector(".ui-menu.open"),t=Array.from(e.querySelectorAll(".ui-menu-item")).find(e=>"Download"===e.querySelector(".text").innerText).querySelector(".title");click(t,!1)}downloadSelectedAssets();
+```
