@@ -2,17 +2,26 @@
 const copyInput = document.createElement('input'); copyInput.id = 'copy-text'; copyInput.style.visibility = 'hidden'; copyInput.style.position = 'fixed';
 document.body.appendChild(copyInput);
 
+// Add notice that bookmarklet is enabled
+const copyOverlay = document.createElement('div');
+copyOverlay.innerText = 'Quick Copy Enabled';
+copyOverlay.style.cssText = 'position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:99999;padding:5vw;background:rgba(0,255,0,0.05);font-size:5em;color:rgba(255,255,255,0.05);font-family:"Arial";text-align:center;pointer-events:none;';
+document.body.appendChild(copyOverlay);
+
 // Highlight text
 function highlight(evt) {
   let elem = evt.target;
   // Inline CSS
-	elem.style.color = 'white';elem.style['text-shadow'] = '0 0 .3em black, 0 0 .3em black, 0 0 .3em black, 0 0 .3em black, 0 0 .3em black';elem.style.cursor='pointer';
+  elem.style.color = 'white';
+  elem.style['text-shadow'] = '0 0 .3em black, 0 0 .3em black, 0 0 .3em black, 0 0 .3em black, 0 0 .3em black';
+  elem.style.cursor='pointer';
   // On click copy text under mouse to clipboard
   elem.addEventListener('click', copyText);
 }
 
 // Copy text
 function copyText(evt) {
+  evt.preventDefault();
   copyInput.value = evt.target.textContent.trim();
   copyInput.style.visibility = 'visible';
   copyInput.focus();
